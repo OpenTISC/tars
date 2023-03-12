@@ -1,12 +1,15 @@
-RARS -- RISC-V Assembler and Runtime Simulator
+TARS -- TISC Assembler and Runtime Simulator
 ----------------------------------------------
 
-RARS, the RISC-V Assembler, Simulator, and Runtime, will assemble and simulate
-the execution of RISC-V assembly language programs. Its primary goal is to be
-an effective development environment for people getting started with RISC-V. 
+TISC is Trustworthy Instruction-Set Computer ISA, design based on RISC-V.
+
+TARS, the TISC Assembler, Simulator, and Runtime, will assemble and simulate
+the execution of TISC assembly language programs. Its primary goal is to be
+an effective development environment for people getting started with TISC. 
 
 ## Features
 
+  - TISC features (TODO)
   - RISC-V IMFDN Base (riscv32 and riscv64)
   - Several system calls that match behaviour from MARS or SPIKE.
   - Support for debugging using breakpoints and/or `ebreak`
@@ -14,11 +17,11 @@ an effective development environment for people getting started with RISC-V.
     intermediate steps
   - Multifile assembly using either files open or a directory
 
-## Documentation
+## Documentation (TODO)
 
 Documentation for supported [instructions](https://github.com/TheThirdOne/rars/wiki/Supported-Instructions), [system calls](https://github.com/TheThirdOne/rars/wiki/Environment-Calls), [assembler directives](https://github.com/TheThirdOne/rars/wiki/Assembler-Directives) and more can be found on the [wiki](https://github.com/TheThirdOne/rars/wiki). Documentation included in the download can be accessed via the help menu. 
 
-## Download
+## Download (TODO)
 
 RARS is distributed as an executable jar. You will need at least Java 8 to run it. 
 
@@ -31,6 +34,8 @@ Running the script `./build-jar.sh` on a Unix system will build `rars.jar`.
 ## Screenshot
 
 ![Screenshot of sample program](screenshot.png)
+
+## Changes from RARS (TODO)
 
 ## Changes from MARS 4.5
 
