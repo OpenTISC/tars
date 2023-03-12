@@ -1,52 +1,40 @@
-TARS -- TISC Assembler and Runtime Simulator
-----------------------------------------------
 
-TISC is Trustworthy Instruction-Set Computer ISA, design based on RISC-V.
 
-TARS, the TISC Assembler, Simulator, and Runtime, will assemble and simulate
-the execution of TISC assembly language programs. Its primary goal is to be
-an effective development environment for people getting started with TISC. 
+## rars模拟器指令调用的入口
 
-## Features
+`src/rars/simulator/Simulator.java`
 
-  - TISC features (TODO)
-  - RISC-V IMFDN Base (riscv32 and riscv64)
-  - Several system calls that match behaviour from MARS or SPIKE.
-  - Support for debugging using breakpoints and/or `ebreak`
-  - Side by side comparison from psuedo-instruction to machine code with
-    intermediate steps
-  - Multifile assembly using either files open or a directory
+`run()`方法模拟了指令的执行，其中大部分是异常的处理和Debug的支持，模拟的核心调用是`instruction.simulate(statement)`	
 
-## Documentation (TODO)
+## 添加指令方式
 
-Documentation for supported [instructions](https://github.com/TheThirdOne/rars/wiki/Supported-Instructions), [system calls](https://github.com/TheThirdOne/rars/wiki/Environment-Calls), [assembler directives](https://github.com/TheThirdOne/rars/wiki/Assembler-Directives) and more can be found on the [wiki](https://github.com/TheThirdOne/rars/wiki). Documentation included in the download can be accessed via the help menu. 
+rars 的所有指令都定义在`src/rars/riscv/instructions`目录下面，每一条指令对应一个java文件，指令按照 RISC-V 的指令类型分为7类，定义在BasicInstructionFormat.java下。可以把需要扩展的指令分一个新的类，这里我暂时用`EXTEND`表示
 
-## Download (TODO)
+```java
+public enum BasicInstructionFormat {
+    R_FORMAT, // 3 register instructions
+    R4_FORMAT,// 4 registers instructions
+    I_FORMAT, // 1 dst and 1 src register + small immediate
+    S_FORMAT, // 2 src registers + small immediate
+    B_FORMAT, // 2 src registers + small immediate shifted left
+    U_FORMAT, // 1 dst register  + large immediate
+    J_FORMAT,  // 1 dst register  + large immediate for jumping
+    EXTEND  // for Digital Logic Design course isa extension
+}
+```
 
-RARS is distributed as an executable jar. You will need at least Java 8 to run it. 
+所有的指令都继承`BasicInstruction`这个基类，基类中定义了指令名字，指令类型，以及指令掩码。
 
-The latest stable release can be found [here](https://github.com/TheThirdOne/rars/releases/latest), a release with the latest developments can be found on the [continuous release](https://github.com/TheThirdOne/rars/releases/tag/continuous), and the [releases page](https://github.com/TheThirdOne/rars/releases) contains all previous stable releases with patch notes.
+```java
+private String instructionName;
+private BasicInstructionFormat instructionFormat;
+private String operationMask;
+private int opcodeMask; 
+private int opcodeMatch;
+```
 
-Alternatively, if you wish to make your own jar and/or modify the code, you
-should clone the repo with `git clone https://github.com/TheThirdOne/rars --recursive`.
-Running the script `./build-jar.sh` on a Unix system will build `rars.jar`.
+添加指令需要创建一个继承`BasicInstruction`的类，按照新指令的掩码来写构造函数，同时重写方法`simulate()`，该方法内部具体定义了新指令的操作，这里添加的测试指令` src/rars/riscv/instructions/ISA_TEST.java `是对`RegisterFile`进行的操作，存储访问的指令需要做一些修改。
 
-## Screenshot
+## 模拟器编译方式
 
-![Screenshot of sample program](screenshot.png)
-
-## Changes from RARS (TODO)
-
-## Changes from MARS 4.5
-
-RARS was built on MARS 4.5 and owes a lot to the development of MARS; its
-important to note what are new developments and what come straight from MARS.
-Besides moving from supporting MIPS to RISC-V and the associated small changes,
-there are several general changes worth noting.
-
-  - Instructions can now be hot-loaded like Tools. If you want to support an additional extension to the RISC-V instruction set. the .class files just need to be added to the right folder
-  - ScreenMagnifier, MARS Bot, Intro to Tools, Scavenger Hunt, and MARS Xray were removed from the included tools. ScreenMagnifier, MARS Bot, Intro to Tools, and Scavenger Hunt were removed because they provide little benefit. And MARS Xray was removed because it is not set up to work with RISC-V, however if someone ports it, it could be merged in.
-  - Removed delayed branching
-  - Removed the print feature
-  - Added a testing framework to verify compatability with the RISC-V specification
-  - Significant internal restructuring and refactoring.
+模拟器的运行需要java8以上的环境支持，命令行执行`java -jar rars.jar`运行模拟器，运行脚本`./build-jar.sh`就可以编译得到`rars.jar`，
