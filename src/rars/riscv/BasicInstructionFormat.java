@@ -41,6 +41,5 @@ public enum BasicInstructionFormat {
     S_FORMAT, // 2 src registers + small immediate
     B_FORMAT, // 2 src registers + small immediate shifted left
     U_FORMAT, // 1 dst register  + large immediate
-    J_FORMAT,  // 1 dst register  + large immediate for jumping
-    EXTEND  // for Digital Logic Design course isa extension
+    J_FORMAT  // 1 dst register  + large immediate for jumping
 }
