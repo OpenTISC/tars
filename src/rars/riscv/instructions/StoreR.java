@@ -8,8 +8,6 @@ import rars.riscv.BasicInstructionFormat;
 import rars.riscv.hardware.AddressErrorException;
 import rars.riscv.hardware.RegisterFile;
 
-import static rars.SimulationException.LOAD_ACCESS_FAULT;
-
 /*
 Copyright (c) 2017,  Benjamin Landers
 
@@ -38,43 +36,41 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /**
- * Base class for all Load instructions
+ * Base class for all Store instructions
  *
  * @author Benjamin Landers
  * @version June 2017
  */
-public abstract class LoadR extends BasicInstruction {
-    public LoadR(String usage, String description, String funct) {
-        super(usage, description, BasicInstructionFormat.I_FORMAT,
-                "1000000 ttttt sssss " + funct + " fffff 0110011");
+public abstract class StoreR extends BasicInstruction {
+    public StoreR(String usage, String description, String funct) {
+        super(usage, description, BasicInstructionFormat.S_FORMAT,
+                "fffff 10 ttttt sssss " + funct + " 000000110011");
     }
-    public LoadR(String usage, String description, String funct, boolean rv64) {
-        super(usage, description, BasicInstructionFormat.I_FORMAT,
-                "1000000 ttttt sssss " + funct + " fffff 0110011",rv64);
-
+    public StoreR(String usage, String description, String funct, boolean rv64) {
+        super(usage, description, BasicInstructionFormat.S_FORMAT,
+                "fffff 10 ttttt sssss " + funct + " 000000110011",rv64);
     }
-
 
     public void simulate(ProgramStatement statement) throws SimulationException {
         int[] operands = statement.getOperands();
         int rs1_val = RegisterFile.getValue(operands[1]);
-//        operands[1] = (operands[1] << 20) >> 20;
         try {
             Globals.memory.check(rs1_val);
         } catch (AddressErrorException e) {
 //            throw new AddressErrorException("rs1 OUT OF RANGE", LOAD_ACCESS_FAULT, rs1_val);
             throw new SimulationException(statement, e);
         }
+//        operands[1] = (operands[1] << 20) >> 20;
         try {
-            RegisterFile.updateRegister(operands[0], load(RegisterFile.getValue(operands[2]) + RegisterFile.getValue(operands[1])));
+            store(RegisterFile.getValue(operands[2]) + RegisterFile.getValue(operands[1]), RegisterFile.getValueLong(operands[0]));
         } catch (AddressErrorException e) {
             throw new SimulationException(statement, e);
         }
     }
 
     /**
-     * @param address the address to load from
-     * @return The value to store to the register
+     * @param address the address to store to
+     * @param value   the value to store
      */
-    protected abstract long load(int address) throws AddressErrorException;
+    protected abstract void store(int address, long value) throws AddressErrorException;
 }

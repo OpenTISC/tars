@@ -619,6 +619,26 @@ public class Memory extends Observable {
         return get(address, length, true);
     }
 
+    public boolean check(int address) throws AddressErrorException {
+        if (inDataSegment(address)) {
+            return true;
+        } else if (address > stackLimitAddress && address <= stackBaseAddress) {
+            // in stack. Similar to data, except relative address computed "backward"
+            return true;
+        } else if (address >= memoryMapBaseAddress && address < memoryMapLimitAddress) {
+            // memory mapped I/O.
+            return true;
+        } else if (inTextSegment(address)) {
+            // Burch Mod (Jan 2013): replace throw with calls to getStatementNoNotify & getBinaryStatement
+            // DPS adaptation 5-Jul-2013: either throw or call, depending on setting
+            return true;
+        } else {
+            // falls outside addressing range
+            throw new AddressErrorException("address out of range ",
+                    SimulationException.LOAD_ACCESS_FAULT, address);
+        }
+    }
+
     // Does the real work, but includes option to NOT notify observers.
     private int get(int address, int length, boolean notify) throws AddressErrorException {
         int value = 0;
@@ -864,6 +884,7 @@ public class Memory extends Observable {
     public int getByte(int address) throws AddressErrorException {
         return get(address, 1);
     }
+
 
     ////////////////////////////////////////////////////////////////////////////////
 

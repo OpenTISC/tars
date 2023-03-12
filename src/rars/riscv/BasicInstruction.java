@@ -30,6 +30,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import rars.ProgramStatement;
 import rars.SimulationException;
+import rars.riscv.hardware.AddressErrorException;
 
 /**
  * Class to represent a basic instruction in the MIPS instruction set.
