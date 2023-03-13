@@ -11,7 +11,7 @@ if git submodule status | grep \( > /dev/null ; then
     rm -r build/src
     cp README.md License.txt build
     cd build
-    jar cfm ../rars.jar ./META-INF/MANIFEST.MF *
+    jar cfm ../tars.jar ./META-INF/MANIFEST.MF *
 else
     echo "It looks like JSoftFloat is not cloned. Consider running \"git submodule update --init\""
 fi

@@ -7,8 +7,8 @@ main:
 	li t1, 8
 	# sw t1, 0(t0)
 	# ERROE:
-	# swr t1 t2(t0)
-	swr t1 t0(t2)
+	swr t1 t2(t0)
+	# swr t1 t0(t2)
 	lw t2, 0(t0)
 	lbr t3, t0(t4)
 	bne t2, t3, failure
