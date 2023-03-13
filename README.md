@@ -33,8 +33,12 @@ private int opcodeMask;
 private int opcodeMatch;
 ```
 
-添加指令需要创建一个继承`BasicInstruction`的类，按照新指令的掩码来写构造函数，同时重写方法`simulate()`，该方法内部具体定义了新指令的操作，这里添加的测试指令` src/rars/riscv/instructions/ISA_TEST.java `是对`RegisterFile`进行的操作，存储访问的指令需要做一些修改。
+添加指令需要创建一个继承`BasicInstruction`的类，按照新指令的掩码来写构造函数，同时重写方法`simulate()`，该方法内部具体定义了新指令的操作，这里添加的测试指令` src/rars/riscv/instructions/ISA_TEST.java `是对RegisterFile进行的操作，存储访问的指令需要做一些修改。
 
 ## 模拟器编译方式
 
-模拟器的运行需要java8以上的环境支持，命令行执行`java -jar rars.jar`运行模拟器，运行脚本`./build-jar.sh`就可以编译得到`rars.jar`，
+模拟器的运行需要java8以上的环境支持，命令行执行`java -jar rars.jar`运行模拟器，运行脚本`./build-jar.sh`就可以编译得到jar文件
+
+## 目前添加的指令
+
+目前已经添加的指令有LBR/LHR/LWR/LBUR/LHUR和SBR/SHR/SWR。指令的功能是首先对 rs1 保存的地址进行指针格式检查，避免基地址出现越界，随后将 rs1 和 rs2 的值相加结果作为地址进行访存，将得到的结果存储到 rs3。汇编指令格式类似`lbr t0, t1(t2)`。
