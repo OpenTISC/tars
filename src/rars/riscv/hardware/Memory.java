@@ -619,6 +619,9 @@ public class Memory extends Observable {
         return get(address, length, true);
     }
 
+    /**
+     check if out of bound
+    **/
     public boolean check(int address) throws AddressErrorException {
         if (inDataSegment(address)) {
             return true;

@@ -8,8 +8,8 @@ main:
 	li t1, 0x4444
 	sw t1, 0(t0)
 	lw t2, 0(t0)
-	# lhr t3, t4(t0)
-	lhr t3, t0(t4)
+	lhr t3, t4(t0)
+	# lhr t3, t0(t4)
 	bne t2, t3, failure
 success:
 	li a0, 42

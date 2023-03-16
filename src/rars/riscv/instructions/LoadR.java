@@ -45,11 +45,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 public abstract class LoadR extends BasicInstruction {
     public LoadR(String usage, String description, String funct) {
-        super(usage, description, BasicInstructionFormat.I_FORMAT,
+        super(usage, description, BasicInstructionFormat.R_FORMAT,
                 "1000000 ttttt sssss " + funct + " fffff 0110011");
     }
     public LoadR(String usage, String description, String funct, boolean rv64) {
-        super(usage, description, BasicInstructionFormat.I_FORMAT,
+        super(usage, description, BasicInstructionFormat.R_FORMAT,
                 "1000000 ttttt sssss " + funct + " fffff 0110011",rv64);
 
     }
@@ -57,14 +57,13 @@ public abstract class LoadR extends BasicInstruction {
 
     public void simulate(ProgramStatement statement) throws SimulationException {
         int[] operands = statement.getOperands();
-        int rs1_val = RegisterFile.getValue(operands[1]);
-//        operands[1] = (operands[1] << 20) >> 20;
-        try {
-            Globals.memory.check(rs1_val);
-        } catch (AddressErrorException e) {
-//            throw new AddressErrorException("rs1 OUT OF RANGE", LOAD_ACCESS_FAULT, rs1_val);
-            throw new SimulationException(statement, e);
-        }
+//        int rs1_val = RegisterFile.getValue(operands[1]);
+        // operands[1] = (operands[1] << 20) >> 20;
+//        try {
+//            Globals.memory.check(rs1_val);
+//        } catch (AddressErrorException e) {
+//            throw new SimulationException(statement, e);
+//        }
         try {
             RegisterFile.updateRegister(operands[0], load(RegisterFile.getValue(operands[2]) + RegisterFile.getValue(operands[1])));
         } catch (AddressErrorException e) {

@@ -43,24 +43,23 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 public abstract class StoreR extends BasicInstruction {
     public StoreR(String usage, String description, String funct) {
-        super(usage, description, BasicInstructionFormat.S_FORMAT,
+        super(usage, description, BasicInstructionFormat.R4_FORMAT,
                 "fffff 10 ttttt sssss " + funct + " 000000110011");
     }
     public StoreR(String usage, String description, String funct, boolean rv64) {
-        super(usage, description, BasicInstructionFormat.S_FORMAT,
+        super(usage, description, BasicInstructionFormat.R4_FORMAT,
                 "fffff 10 ttttt sssss " + funct + " 000000110011",rv64);
     }
 
     public void simulate(ProgramStatement statement) throws SimulationException {
         int[] operands = statement.getOperands();
-        int rs1_val = RegisterFile.getValue(operands[1]);
-        try {
-            Globals.memory.check(rs1_val);
-        } catch (AddressErrorException e) {
-//            throw new AddressErrorException("rs1 OUT OF RANGE", LOAD_ACCESS_FAULT, rs1_val);
-            throw new SimulationException(statement, e);
-        }
-//        operands[1] = (operands[1] << 20) >> 20;
+//        int rs1_val = RegisterFile.getValue(operands[1]);
+//        try {
+//            Globals.memory.check(rs1_val);
+//        } catch (AddressErrorException e) {
+////            throw new AddressErrorException("rs1 OUT OF RANGE", LOAD_ACCESS_FAULT, rs1_val);
+//            throw new SimulationException(statement, e);
+//        }
         try {
             store(RegisterFile.getValue(operands[2]) + RegisterFile.getValue(operands[1]), RegisterFile.getValueLong(operands[0]));
         } catch (AddressErrorException e) {
